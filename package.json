@@ -1,0 +1,24 @@
+{
+  "name": "partial-index",
+  "version": "1.0.0",
+  "description": "create and manage index for partial sorting",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "keywords": [
+	"sort",
+	"insertion-sort",
+	"top-10-list",
+	"leaderboard"
+  ],
+  "author": "drpaulbrewer@gmail.com",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^2.3.4",
+    "should": "^8.1.1"
+  }
+}
