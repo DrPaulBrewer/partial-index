@@ -44,11 +44,11 @@
     function makeFilter(prop1,dir1,prop2,dir2,prop3,dir3){
 	if (dir3){
 	    return function(item){
-		return (item && (item[prop3]>0) && (item[prop2]>0) && (item[prop1]>0));
+		return (item && (item[prop1]>0) && (item[prop2]>0) && (item[prop3]>0));
 	    };
 	} else if (dir2){
 	    return function(item){
-		return (item && (item[prop2]>0) && (item[prop1]>0));
+		return (item && (item[prop1]>0) && (item[prop2]>0));
 	    };
 	} else 
 	    return function(item){
