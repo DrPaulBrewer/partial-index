@@ -110,11 +110,11 @@ describe('PartialIndex', function(){
 			x.scan();
 			x.idx.should.eql(answer.slice(0,limit));
 		    });
-		    it('should also be correct using push and sync', function(){
+		    it('should also be correct using push and syncLast', function(){
 			var x = new PartialIndex([],limit,2,1,0,1);
 			tendata.forEach(function(item){
 			    x.data.push(item);
-			    x.sync();
+			    x.syncLast();
 			});
 			x.idx.should.eql(answer.slice(0,limit));
 		    });
@@ -148,11 +148,11 @@ describe('PartialIndex', function(){
 			x.scan();
 			x.idx.should.eql(answer.slice(0,limit));
 		    });
-		    it('should also be correct using push and sync', function(){
+		    it('should also be correct using push and syncLast', function(){
 			var x = new PartialIndex([], limit, 2,1,1,1);
 			tendata.forEach(function(item){
 			    x.data.push(item);
-			    x.sync();
+			    x.syncLast();
 			});
 			x.idx.should.eql(answer.slice(0,limit));
 		    });
@@ -187,11 +187,11 @@ describe('PartialIndex', function(){
 			x.scan();
 			x.idx.should.eql(answer.slice(0,limit));
 		    });
-		    it('should also be correct using push and sync', function(){
+		    it('should also be correct using push and syncLast', function(){
 			var x = new PartialIndex([], limit, 2,1,0,-1);
 			tendata.forEach(function(item){
 			    x.data.push(item);
-			    x.sync();
+			    x.syncLast();
 			});
 			x.idx.should.eql(answer.slice(0,limit));
 		    });
@@ -226,11 +226,11 @@ describe('PartialIndex', function(){
 			x.scan();
 			x.idx.should.eql(answer.slice(0,limit));
 		    });
-		    it('should also be correct using push and sync', function(){
+		    it('should also be correct using push and syncLast', function(){
 			var x = new PartialIndex([],limit,2,1,1,-1);
 			tendata.forEach(function(item){
 			    x.data.push(item);
-			    x.sync();
+			    x.syncLast();
 			});
 			x.idx.should.eql(answer.slice(0,limit));
 		    });

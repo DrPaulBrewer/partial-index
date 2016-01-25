@@ -141,7 +141,7 @@
 	}
     };
 
-    PartialIndex.prototype.sync = function(){ 
+    PartialIndex.prototype.syncLast = function(){ 
 	var lastdataidx = this.data.length-1;
 	var loc;
 	var idx = this.idx;
