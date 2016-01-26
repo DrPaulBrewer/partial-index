@@ -101,18 +101,37 @@
 	}
     }
 
-
     var PartialIndex =
 	function(data, limit, prop1, dir1, prop2, dir2, prop3, dir3){
-	this.data = data;
-	this.limit = limit;
-	this.idx = [];
-	this.datafilter = makeFilter(prop1,dir1,prop2,dir2,prop3,dir3);
-	this.datacomp = makeSorter(prop1,dir1,prop2,dir2,prop3,dir3);
-	var that = this;
-	this.idxcomp = function(a,b){ var d=that.data; return that.datacomp(d[a],d[b]); };
-	this.idxfilter = function(i){ return that.datafilter(that.data[i]); };
-	if (this.data.length) this.needScan = 1;
+	    this.data = data;
+	    this.limit = limit;
+	    this.idx = [];
+	    this.prop1 = prop1;
+	    this.datafilter = makeFilter(prop1,dir1,prop2,dir2,prop3,dir3);
+	    this.datacomp = makeSorter(prop1,dir1,prop2,dir2,prop3,dir3);
+	    var that = this;
+	    this.idxcomp = function(a,b){ var d=that.data; return that.datacomp(d[a],d[b]); };
+	    this.idxfilter = function(i){ return that.datafilter(that.data[i]); };
+	    if (this.data.length) this.needScan = 1;
+	};
+
+    PartialIndex.prototype.val = function(i){
+	if (i>this.idx.length) 
+	    throw "PartialIndex.val index out of range";
+	return this.data[this.idx[i]][this.prop1];
+    };
+
+    PartialIndex.prototype.vals = function(){
+	for(var i=0,l=this.idx.length,a=[],data=this.data,idx=this.idx,prop=this.prop1;i<l;++i)
+	    a[i] = data[idx[i]][prop];
+	return a;
+    };
+    
+    PartialIndex.prototype.idxdata = function(){
+	var i=0,l=this.idx.length,idx=this.idx,data=this.data,a=[];
+	for(i=0;i<l;++i)
+	    a[i] = data[idx[i]];
+	return a;
     };
 
     PartialIndex.prototype.scan = function(){

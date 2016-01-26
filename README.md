@@ -42,6 +42,16 @@ as top 10 lists, bottom 10 lists, etc. Up to 3 columns with directions can be sp
 
 the top 3 of col 2 are 9,5,4 which are found in rows [5], [4], and [2] of data
 
+#### convenience methods
+
+    X.idxdata()  // array of data rows [[6,4,9],[5,5,5],[3,7,4]
+
+    X.vals() // array of prop1 [9,5,4]
+
+    X.val(0) // 9
+    X.val(1) // 5
+    X.val(2) // 4
+
 ### `.syncLast()` adds the last row of data to the index
 
 To add a single row of new data, use `data.push(newrow)` and then call `X.syncLast()`

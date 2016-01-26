@@ -39,7 +39,7 @@ describe('PartialIndex', function(){
 	it('idx should be empty', function(){
 	    x.idx.should.eql([]);
 	});
-	it('should have functions datafilter, datacomp, idxcomp, idxfilter', function(){
+	it('should have functions datafilter, datacomp, idxcomp, idxfilter, idxdata', function(){
 	    x.should.have.property('datafilter');
 	    x.datafilter.should.be.type('function');
 	    x.should.have.property('datacomp');
@@ -48,6 +48,11 @@ describe('PartialIndex', function(){
 	    x.idxcomp.should.be.type('function');
 	    x.should.have.property('idxfilter');
 	    x.idxfilter.should.be.type('function');
+	    x.should.have.property('idxdata');
+	    x.idxdata.should.be.type('function');
+	});
+	it('.idxdata() should be []', function(){
+	    x.idxdata().should.be.eql([]);
 	});
 	it('should have property needScan set to 1', function(){
 	    x.should.have.property('needScan');
@@ -68,6 +73,27 @@ describe('PartialIndex', function(){
 		else
 		    x.idx.should.eql(seq.slice().reverse().slice(0,j));
 	    });
+	    it('should have correct idxdata()', function(){
+		var x = new PartialIndex(tendata.slice(),j,col);
+		x.scan();
+		if (col===0)
+		    x.idxdata().should.eql(tendata.slice(0,j));
+		else 
+		    x.idxdata().should.eql(tendata.slice().reverse().slice(0,j));
+	    });
+	    it('should return correct val(i) ', function(){
+		var i=0,l=j;
+		var x = new PartialIndex(tendata.slice(),j,col);
+		x.scan();
+		for(i=0;i<l;++i)
+		    assert.strictEqual(x.val(i), i+1);
+	    });
+	    it('should return correct vals()', function(){
+		var x = new PartialIndex(tendata.slice(),j,col);
+		var a = [1,2,3,4,5,6,7,8,9];
+		x.scan();
+		x.vals().should.eql((0===j)? ([]): (a.slice(0,j)));
+	    });	
 	    it('should have correct idx when deleting [4]', function(){
 		var x = new PartialIndex(tendata.slice(),j,col);
 		x.scan();
