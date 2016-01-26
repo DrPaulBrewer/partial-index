@@ -1,6 +1,6 @@
 {
   "name": "partial-index",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "create and manage index for partial sorting of 2D numerical data array",
   "main": "index.js",
   "repository": "drpaulbrewer/partial-index",
@@ -11,10 +11,10 @@
     "test": "make test"
   },
   "keywords": [
-	"sort",
-	"insertion-sort",
-	"top-10-list",
-	"leaderboard"
+    "sort",
+    "insertion-sort",
+    "top-10-list",
+    "leaderboard"
   ],
   "author": "drpaulbrewer@gmail.com",
   "license": "MIT",
