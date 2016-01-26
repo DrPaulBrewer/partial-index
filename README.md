@@ -58,7 +58,7 @@ to remove rows `[1,2,3]`:
 1. `PartialIndex.remove` will decrement surviving index values down as necessary. 
 1. `PartialIndex.remove` will not fill out the list again.  To do that requires a `.scan()`
 1. Because of decrements, calling `PartialIndex.remove` without also removing the rows from the data will yield invalid results
-1. We don't do removals or syncLast for you, so that is is possible to maintain several indexes on the same data
+1. The PartialIndex accesses `.data` in a read-only matter and only modifies or resets `.idx`. It does not do `data.splice(someindex,1)` or `data.push(newrow)` for you, making it possible to maintain several indexes on the same data.  
 1. `PartialIndex.data` is a reference to the data 2D array (or array-of-array), not an independent copy of it.
 1. Negative, zero, and undefined data is allowed, but only positive data is indexed.
 
