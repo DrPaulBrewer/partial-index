@@ -6,8 +6,11 @@ as top 10 lists, bottom 10 lists, etc. Up to 3 columns with directions can be sp
 
 ##Example:
 
+###Installation
 
     npm install partial-index --save
+
+###Running
 
     node
 
@@ -23,7 +26,7 @@ as top 10 lists, bottom 10 lists, etc. Up to 3 columns with directions can be sp
 
     > var PartialIndex = require('partial-index');
 
-##Create index for top 3 from col 2
+##Create `new PartialIndex(data, limit, col, dir, ... )` for top 3 from col 2
 
     > var X = new PartialIndex(data, 3, 2, -1); 
     > X.idx
