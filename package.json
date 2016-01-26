@@ -1,7 +1,7 @@
 {
   "name": "partial-index",
   "version": "1.0.0",
-  "description": "create and manage index for partial sorting",
+  "description": "create and manage index for partial sorting of 2D numerical data array",
   "main": "index.js",
   "directories": {
     "test": "test"
