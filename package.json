@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "create and manage index for partial sorting of 2D numerical data array",
   "main": "index.js",
-  "repository": "drpaulbrewer/partial-index"
+  "repository": "drpaulbrewer/partial-index",
   "directories": {
     "test": "test"
   },
