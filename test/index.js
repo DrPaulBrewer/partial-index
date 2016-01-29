@@ -75,11 +75,18 @@ describe('PartialIndex', function(){
 	    });
 	    it('should have correct idxdata()', function(){
 		var x = new PartialIndex(tendata.slice(),j,col);
+		var a;
 		x.scan();
 		if (col===0)
-		    x.idxdata().should.eql(tendata.slice(0,j));
+		    a = tendata.slice(0,j);
 		else 
-		    x.idxdata().should.eql(tendata.slice().reverse().slice(0,j));
+		    a = tendata.slice().reverse().slice(0,j);
+		x.idxdata().should.eql(a);
+		assert.strictEqual(x.idxdata(-1), undefined);
+		var i;
+		for(i=0;i<j;++i)
+		    x.idxdata(i).should.eql(a[i]);
+		assert.strictEqual(x.idxdata(j), undefined);
 	    });
 	    it('should return correct val(i) ', function(){
 		var i=0,l=j;
@@ -88,6 +95,14 @@ describe('PartialIndex', function(){
 		for(i=0;i<l;++i)
 		    assert.strictEqual(x.val(i), i+1);
 	    });
+	    it('should return undefined val(i) when i out of range', function(){
+		var x = new PartialIndex(tendata.slice(),j,col);
+		assert.strictEqual(x.val(0), undefined);
+		x.scan();
+		assert.strictEqual(x.val(-1), undefined, "val(-1) !== undefined");
+		assert.strictEqual(x.val(j), undefined, "val(length) !== undefined");
+	    });
+		
 	    it('should return correct vals()', function(){
 		var x = new PartialIndex(tendata.slice(),j,col);
 		var a = [1,2,3,4,5,6,7,8,9];

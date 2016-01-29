@@ -116,8 +116,8 @@
 	};
 
     PartialIndex.prototype.val = function(i){
-	if (i>this.idx.length) 
-	    throw "PartialIndex.val index out of range";
+	if ((i>=this.idx.length) || (i<0))
+	    return undefined;
 	return this.data[this.idx[i]][this.prop1];
     };
 
@@ -127,11 +127,14 @@
 	return a;
     };
     
-    PartialIndex.prototype.idxdata = function(){
+    PartialIndex.prototype.idxdata = function(ii){
 	var i=0,l=this.idx.length,idx=this.idx,data=this.data,a=[];
-	for(i=0;i<l;++i)
-	    a[i] = data[idx[i]];
-	return a;
+	if (ii===undefined){
+	    for(i=0;i<l;++i)
+		a[i] = data[idx[i]];
+	    return a;
+	}
+	return data[idx[ii]];
     };
 
     PartialIndex.prototype.scan = function(){
