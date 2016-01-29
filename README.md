@@ -44,13 +44,17 @@ the top 3 of col 2 are 9,5,4 which are found in rows [5], [4], and [2] of data
 
 #### convenience methods
 
-    X.idxdata()  // array of data rows [[6,4,9],[5,5,5],[3,7,4]
+    X.idxdata()  // array of data rows [[6,4,9],[5,5,5],[3,7,4]]
+    X.idxdata(0) // [6,4,9]
+    X.idxdata(1) // [5,5,5]
+    X.idxdata(999) // undefined
 
     X.vals() // array of prop1 [9,5,4]
 
     X.val(0) // 9
     X.val(1) // 5
     X.val(2) // 4
+    X.val(3) // undefined
 
 ### `.syncLast()` adds the last row of data to the index
 
