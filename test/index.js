@@ -292,5 +292,16 @@ describe('PartialIndex', function(){
 		});
 	    })(i);
     });
-    
+    describe(".remove()", function(){
+	var data = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8]];
+	it('should remove ordered list [2,3]', function(){
+	    var x = new PartialIndex(data,5,0,1);
+	    x.remove([2,3]);
+            assert.ok(true);
+	});
+	it('should throw if removing misordered list [3,2]', function(){
+	    var x = new PartialIndex(data,5,0,1);
+	    x.remove.bind(x,[3,2]).should.throw();
+	});
+    }); 
 });

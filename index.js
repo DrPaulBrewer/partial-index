@@ -192,7 +192,7 @@
 	var removed=0;
 	if (0===rmidxs.length) return;
 	while(i-->1){
-	    if (rmidxs[i-1]<=rmidxs[i])
+	    if (rmidxs[i-1]>=rmidxs[i])
 		throw "PartialIndex.remove called with unsorted list of indexes. List of indexes to be removed must be ascending.";
 	}
 	i = rmidxs.length;
