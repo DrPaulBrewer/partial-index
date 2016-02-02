@@ -143,6 +143,37 @@ describe('PartialIndex', function(){
 		if (j>=8 && col===1) a=seq.slice().reverse().slice(2,j);
 		x.idx.should.eql(a);
 	    });
+	    it('should have correct idx when removeing [1,3,5,7]', function(){
+		x = new PartialIndex(tendata.slice(),j,col);
+		x.scan();
+		x.remove([1,3,5,7]);
+		x.data.splice(7,1);
+		x.data.splice(5,1);
+		x.data.splice(3,1);
+		x.data.splice(1,1);
+		var a;
+		if (j===0) a=[];
+		if (j===1 && col===0) a=[0];
+		if (j===2 && col===0) a=[0];
+		if (j===3 && col===0) a=[0,1];
+		if (j===4 && col===0) a=[0,1];
+		if (j===5 && col===0) a=[0,1,2];
+		if (j===6 && col===0) a=[0,1,2];
+		if (j===7 && col===0) a=[0,1,2,3];
+		if (j===8 && col===0) a=[0,1,2,3];
+		if (j===9 && col===0) a=[0,1,2,3,4];
+		if (j===1 && col===1) a=[4];
+		if (j===2 && col===1) a=[4];
+		if (j===3 && col===1) a=[4,3];
+		if (j===4 && col===1) a=[4,3];
+		if (j===5 && col===1) a=[4,3,2];
+		if (j===6 && col===1) a=[4,3,2];
+		if (j===7 && col===1) a=[4,3,2,1];
+		if (j===8 && col===1) a=[4,3,2,1];
+		if (j===9 && col===1) a=[4,3,2,1,0];
+		x.idx.should.eql(a);
+	    });		
+		
 	});
     }
 
