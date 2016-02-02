@@ -8,15 +8,15 @@ var PartialIndex = require("../index.js");
 
 describe('PartialIndex', function(){
     var tendata = 
-	[[1,9,3],
-	 [2,8,1],
-	 [3,7,4],
-	 [4,6,1],
-	 [5,5,5],
-	 [6,4,9],
-	 [7,3,2],
-	 [8,2,6],
-	 [9,1,5]];
+	[[1,9,3,10,10],
+	 [2,8,1,10,10],
+	 [3,7,4,10,10],
+	 [4,6,1,10,10],
+	 [5,5,5,10,10],
+	 [6,4,9,10,10],
+	 [7,3,2,10,10],
+	 [8,2,6,10,10],
+	 [9,1,5,10,10]];
     describe('new properties', function(){
 	var data = tendata.slice();
 	var limit = 7;
@@ -73,6 +73,35 @@ describe('PartialIndex', function(){
 		else
 		    x.idx.should.eql(seq.slice().reverse().slice(0,j));
 	    });
+	    it('should have correct idx on 2nd sort col when 1st sort col is tied', function(){
+		var x = new PartialIndex(tendata.slice(),j,3,-1,col,1);
+		var y = new PartialIndex(tendata.slice(),j,3,1,col,1);
+		x.scan();
+		y.scan();
+		if (col===0)
+		    x.idx.should.eql(seq.slice(0,j));
+		else
+		    x.idx.should.eql(seq.slice().reverse().slice(0,j));
+		y.idx.should.eql(x.idx);
+	    });
+	    it('should have correct idx on 3rd sort col when 1st and 2nd sort cols are tied', 
+	       function(){
+		   var x =  new PartialIndex(tendata.slice(),j,3,-1,4,-1,col,1);
+		   var x2 = new PartialIndex(tendata.slice(),j,3,1,4,-1,col,1);
+		   var x3 = new PartialIndex(tendata.slice(),j,3,-1,4,1,col,1);
+		   var x4 = new PartialIndex(tendata.slice(),j,3,1,4,1,col,1);
+		   x.scan();
+		   x2.scan();
+		   x3.scan();
+		   x4.scan();
+		   if (col===0)
+		       x.idx.should.eql(seq.slice(0,j));
+		   else
+		       x.idx.should.eql(seq.slice().reverse().slice(0,j));
+		   x2.idx.should.eql(x.idx);
+		   x3.idx.should.eql(x.idx);
+		   x4.idx.should.eql(x.idx);
+	       });
 	    it('should have correct idxdata()', function(){
 		var x = new PartialIndex(tendata.slice(),j,col);
 		var a;
