@@ -73,6 +73,19 @@ describe('PartialIndex', function(){
 		else
 		    x.idx.should.eql(seq.slice().reverse().slice(0,j));
 	    });
+	    it('should change limit to 3 with scan(3)', function(){
+		var x = new PartialIndex(tendata.slice(),j,col);
+		x.scan();
+		if (col===0)
+		    x.idx.should.eql(seq.slice(0,j));
+		else
+		    x.idx.should.eql(seq.slice().reverse().slice(0,j));
+		x.scan(3);
+		if (col===0)
+		    x.idx.should.eql(seq.slice(0,3));
+		else
+		    x.idx.should.eql(seq.slice().reverse().slice(0,3));		
+	    });
 	    it('should have correct idx on 2nd sort col when 1st sort col is tied', function(){
 		var x = new PartialIndex(tendata.slice(),j,3,-1,col,1);
 		var y = new PartialIndex(tendata.slice(),j,3,1,col,1);
@@ -384,6 +397,34 @@ describe('PartialIndex', function(){
 	it('should throw if removing misordered list [3,2]', function(){
 	    var x = new PartialIndex(data,5,0,1);
 	    x.remove.bind(x,[3,2]).should.throw();
+	});
+	it('options={scan:1} should scan and fill out idx', function(){
+	    var x = new PartialIndex(data,5,0,1);
+	    var y = new PartialIndex(data,5,0,1);
+	    x.scan();
+	    y.scan();
+	    x.remove([2,4], {scan:1});
+	    y.remove([2,4]);
+	    x.idx.should.eql([0,1,2,3,4]);
+	    assert.ok(!x.needScan);
+	    y.idx.should.eql([0,1,2]);
+	    assert.ok(y.needScan);
+	});
+	it('options={shrink:1} should reduce limit and not set needScan', function(){
+	    var x = new PartialIndex(data,5,0,1);
+	    x.scan();
+	    x.remove([2,4], {shrink:1});
+	    x.idx.should.eql([0,1,2]);
+	    assert.ok(!x.needScan);
+	    assert.ok(x.limit===3);
+	});
+	it('options={preserve:1} should preserve index values, no decrement after remove', function(){
+	    var x = new PartialIndex(data,5,0,1);
+	    x.scan();
+	    x.remove([2,4], {preserve:1});
+	    x.idx.should.eql([0,1,3]);
+	    assert.ok(x.limit===5);
+	    assert.ok(x.needScan);
 	});
     }); 
 });

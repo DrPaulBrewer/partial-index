@@ -137,13 +137,14 @@
 	return data[idx[ii]];
     };
 
-    PartialIndex.prototype.scan = function(){
+    PartialIndex.prototype.scan = function(newLimit){
 	var i,l;
 	this.idx = [];
-	var idx = this.idx, limit=this.limit, datalength=this.data.length, data=this.data, f=this.datafilter;
+	var idx = this.idx, limit=(newLimit || this.limit), datalength=this.data.length, data=this.data, f=this.datafilter;
 	var idxcomp = this.idxcomp;
 	var loc;
 	this.needScan = 0;
+	this.limit = limit;
 	if (0===limit) return;
 	i=0;
 	while((i<datalength) && (idx.length<limit)){
@@ -185,7 +186,7 @@
     };
 
 
-    PartialIndex.prototype.remove = function(rmidxs){
+    PartialIndex.prototype.remove = function(rmidxs, options){
 	var i=rmidxs.length,l;
 	var idx = this.idx;
 	var loc;
@@ -203,7 +204,15 @@
 		++removed;
 	    }
 	}
-	if (removed) this.needScan=1;
+	if (removed && options && options.scan)
+	    return this.scan(options.limit);
+	if (removed){
+	    if (options && options.shrink)
+		this.limit -= removed;
+	    else 
+		this.needScan=1;
+	}
+	if (options && options.preserve) return; 
 	for(i=0,l=idx.length;i<l;++i)
 	    idx[i] -= idxByBisection(rmidxs, idx[i]);
     };
