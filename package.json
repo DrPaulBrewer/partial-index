@@ -8,7 +8,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "make test"
+    "test": "make test",
+    "cover": "node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- -R spec test/*"
   },
   "keywords": [
     "sort",
@@ -19,6 +20,8 @@
   "author": "drpaulbrewer@gmail.com",
   "license": "MIT",
   "devDependencies": {
+    "coveralls": "^2.11.6",
+    "istanbul": "^0.4.2",
     "mocha": "^2.3.4",
     "should": "^8.1.1"
   }
