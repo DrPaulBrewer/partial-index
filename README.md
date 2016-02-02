@@ -1,6 +1,8 @@
 partial-index.js
 ====
 [![Build Status](https://travis-ci.org/DrPaulBrewer/partial-index.svg?branch=master)](https://travis-ci.org/DrPaulBrewer/partial-index)
+[![Coverage Status](https://coveralls.io/repos/github/DrPaulBrewer/partial-index/badge.svg?branch=master)](https://coveralls.io/github/DrPaulBrewer/partial-index?branch=master)
+
 
 Npm javascript module for creating partial indexes on positive values in numerical 2D array data, such
 as top 10 lists, bottom 10 lists, etc. Up to 3 columns with directions can be specified.
