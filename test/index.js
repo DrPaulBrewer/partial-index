@@ -109,7 +109,7 @@ describe('PartialIndex', function(){
 		x.scan();
 		x.vals().should.eql((0===j)? ([]): (a.slice(0,j)));
 	    });	
-	    it('should have correct idx when deleting [4]', function(){
+	    it('should have correct idx when removing [4]', function(){
 		var x = new PartialIndex(tendata.slice(),j,col);
 		x.scan();
 		x.remove([4]);
@@ -296,8 +296,13 @@ describe('PartialIndex', function(){
 	var data = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8]];
 	it('should remove ordered list [2,3]', function(){
 	    var x = new PartialIndex(data,5,0,1);
+	    var y = new PartialIndex(data,5,0,-1);
+	    x.scan();
+	    y.scan();
 	    x.remove([2,3]);
-            assert.ok(true);
+	    y.remove([2,3]);
+            x.idx.should.eql([0,1,2]);
+	    y.idx.should.eql([4,3,2]);
 	});
 	it('should throw if removing misordered list [3,2]', function(){
 	    var x = new PartialIndex(data,5,0,1);
