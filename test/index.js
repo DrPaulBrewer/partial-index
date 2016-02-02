@@ -294,13 +294,13 @@ describe('PartialIndex', function(){
     });
     describe(".remove()", function(){
 	var data = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8]];
-	it('should remove ordered list [2,3]', function(){
+	it('should remove ordered list [2,4]', function(){
 	    var x = new PartialIndex(data,5,0,1);
 	    var y = new PartialIndex(data,5,0,-1);
 	    x.scan();
 	    y.scan();
-	    x.remove([2,3]);
-	    y.remove([2,3]);
+	    x.remove([2,4]);
+	    y.remove([2,4]);
             x.idx.should.eql([0,1,2]);
 	    y.idx.should.eql([4,3,2]);
 	});
