@@ -126,6 +126,23 @@ describe('PartialIndex', function(){
 		if (j>0 && col===1) a = seq.slice().reverse().slice(1,j+1);
 		x.idx.should.eql(a);
 	    });
+	    it('should have correct idx when removing [1,4]', function(){
+		var x = new PartialIndex(tendata.slice(), j, col);
+		x.scan();
+		x.remove([1,4]);
+		x.data.splice(4,1);
+		x.data.splice(1,1);
+		var a;
+		if (j===0) a=[];
+		if (j===1 && col===0) a=[0];
+		if (j>1 && j<5 && col===0) a = seq.slice(0,j-1);
+		if (j>=5 && col===0) a=seq.slice(0,j-2);
+		if (j>=8 && col===0) a = seq.slice(0,j-2); 
+		if (j>0 && j<5 && col===1) a = seq.slice().reverse().slice(2,j+2);
+		if (j>=5 && j<8 && col===1) a=seq.slice().reverse().slice(2,j+1);
+		if (j>=8 && col===1) a=seq.slice().reverse().slice(2,j);
+		x.idx.should.eql(a);
+	    });
 	});
     }
 
