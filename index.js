@@ -217,6 +217,13 @@
 	    idx[i] -= idxByBisection(rmidxs, idx[i]);
     };
 
+    PartialIndex.prototype.shrink = function(newsize){
+	var s = +newsize;
+	if ((!s) || (s<=0) || (s>=this.limit) ) return;
+	this.limit = s;
+	this.idx.splice(s,this.idx.length-s);
+    };
+
     module.exports = PartialIndex;
     
 })();

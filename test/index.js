@@ -427,4 +427,35 @@ describe('PartialIndex', function(){
 	    assert.ok(x.needScan);
 	});
     }); 
+    describe('.shrink(newsize)', function(){
+	var data = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8]];
+	it('should do nothing if newsize is less than or equal to 0, non-numeric, or gt limit', function(){
+	    var x = new PartialIndex(data,5,0,1);
+	    x.scan();
+	    x.idx.should.eql([0,1,2,3,4]);
+	    x.shrink(0);
+	    assert.ok(x.limit===5);
+	    x.idx.should.eql([0,1,2,3,4]);
+	    x.shrink(-1);
+	    assert.ok(x.limit===5);
+	    x.idx.should.eql([0,1,2,3,4]);
+	    x.shrink('ZombieApocalypse');
+	    assert.ok(x.limit===5);
+	    x.idx.should.eql([0,1,2,3,4]);
+	    x.shrink(666);
+	    x.idx.should.eql([0,1,2,3,4]);
+	    assert.ok(x.limit===5);
+	});
+	it('should shrink index and limit if newlimit is smaller and positive', function(){
+	    var x = new PartialIndex(data,5,0,1);
+	    x.scan();
+	    x.idx.should.eql([0,1,2,3,4]);
+	    x.shrink(3);
+	    x.idx.should.eql([0,1,2]);
+	    assert.ok(x.limit===3);
+	    x.shrink(1);
+	    assert.ok(x.limit===1);
+	    x.idx.should.eql([0]);
+	});
+    });
 });

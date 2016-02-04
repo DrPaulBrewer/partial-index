@@ -67,6 +67,14 @@ the top 3 of col 2 are 9,5,4 which are found in rows [5], [4], and [2] of data
     > X.idx
     [5,4,2,0]
 
+### shrink will set a smaller limit without rescanning
+    
+    > X.shrink(3)
+    > X.limit
+    3
+    > X.idx
+    [5,4,2]
+
 ### `.syncLast()` adds the last row of data to the index
 
 To add a single row of new data, use `data.push(newrow)` and then call `X.syncLast()`
