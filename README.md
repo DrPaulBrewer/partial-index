@@ -66,6 +66,14 @@ the top 3 of col 2 are 9,5,4 which are found in rows [5], [4], and [2] of data
     4
     > X.idx
     [5,4,2,0]
+    
+### the scan filtering step is cached in .iok and can be skipped by calling .sort
+
+   > X.sort(4)
+   > X.limit
+   5
+   > X.idx
+    [5,4,2,0]
 
 ### shrink will set a smaller limit without rescanning
     
