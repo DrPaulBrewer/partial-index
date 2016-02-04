@@ -106,6 +106,7 @@
 	    this.data = data;
 	    this.limit = limit;
 	    this.idx = [];
+	    this.iok = [];
 	    this.prop1 = prop1;
 	    this.datafilter = makeFilter(prop1,dir1,prop2,dir2,prop3,dir3);
 	    this.datacomp = makeSorter(prop1,dir1,prop2,dir2,prop3,dir3);
@@ -140,27 +141,34 @@
     PartialIndex.prototype.scan = function(newLimit){
 	var i,l;
 	this.idx = [];
-	var idx = this.idx, limit=(newLimit || this.limit), datalength=this.data.length, data=this.data, f=this.datafilter;
-	var idxcomp = this.idxcomp;
-	var loc;
+	this.iok = [];
+	var idx = this.idx, iok=this.iok, limit=(newLimit || this.limit), datalength=this.data.length, data=this.data, f=this.datafilter;
 	this.needScan = 0;
 	this.limit = limit;
 	if (0===limit) return;
-	i=0;
-	while((i<datalength) && (idx.length<limit)){
+	for(i=0,l=datalength;i<l;++i)
 	    if (f(data[i]))
-		idx.push(i);
-	    ++i;
-	}
-	idx.sort(this.idxcomp);
-	if (datalength<=limit) return;
-	while(i<datalength){
-	    if (f(data[i])){
-		loc = idxByBisection(idx,i,idxcomp);
+		iok.push(i);
+	this.sort();
+    };
+
+    PartialIndex.prototype.sort = function(newLimit){
+	if (newLimit>0)
+	    this.limit = newLimit;
+	var iok=this.iok, limit=this.limit, idxcomp=this.idxcomp, loc, i,l;
+	this.needScan = 0;
+	if (0===limit) return;
+	this.idx = iok.slice(0,limit);
+	if (0===iok.length) return;
+	var idx = this.idx;
+	idx.sort(idxcomp);
+	if (iok.length <= limit) return;
+	for(i=this.idx.length,l=iok.length;i<l;++i){
+	    loc = idxByBisection(idx,i,idxcomp);
+	    if (loc<limit) {
 		idx.splice(loc,0,i);
 		idx.splice(limit,1);
-	    }	
-	    ++i;
+	    }
 	}
     };
 
@@ -171,7 +179,8 @@
 	var limit = this.limit;
 	if (!limit) return;
 	if (this.idxfilter(lastdataidx)){
-	    if (this.needScan) return this.scan();
+	    this.iok.push(lastdataidx);
+	    if (this.needScan) return this.sort();
 	    if (idx.length<limit){
 		idx.push(lastdataidx);
 		idx.sort(this.idxcomp);

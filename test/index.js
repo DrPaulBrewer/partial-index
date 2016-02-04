@@ -39,6 +39,12 @@ describe('PartialIndex', function(){
 	it('idx should be empty', function(){
 	    x.idx.should.eql([]);
 	});
+	it('should have iok property', function(){
+	    x.should.have.property('iok');
+	});
+	it('iok should be empty', function(){
+	    x.iok.should.eql([]);
+	});
 	it('should have functions datafilter, datacomp, idxcomp, idxfilter, idxdata', function(){
 	    x.should.have.property('datafilter');
 	    x.datafilter.should.be.type('function');
