@@ -399,12 +399,14 @@ describe('PartialIndex', function(){
 	    y.remove([2,4]);
             x.idx.should.eql([0,1,2]);
 	    y.idx.should.eql([4,3,2]);
+	    x.iok.should.eql([]);
+	    y.iok.should.eql([]);
 	});
 	it('should throw if removing misordered list [3,2]', function(){
 	    var x = new PartialIndex(data,5,0,1);
 	    x.remove.bind(x,[3,2]).should.throw();
 	});
-	it('options={scan:1} should scan and fill out idx', function(){
+	it('options={scan:1} should scan and fill out iok and idx', function(){
 	    var x = new PartialIndex(data,5,0,1);
 	    var y = new PartialIndex(data,5,0,1);
 	    x.scan();
@@ -413,24 +415,28 @@ describe('PartialIndex', function(){
 	    y.remove([2,4]);
 	    x.idx.should.eql([0,1,2,3,4]);
 	    assert.ok(!x.needScan);
+	    x.iok.should.eql([0,1,2,3,4,5,6]);
 	    y.idx.should.eql([0,1,2]);
 	    assert.ok(y.needScan);
+	    y.iok.should.eql([]);
 	});
-	it('options={shrink:1} should reduce limit and not set needScan', function(){
+	it('options={shrink:1} should reduce limit and not set needScan but clear iok', function(){
 	    var x = new PartialIndex(data,5,0,1);
 	    x.scan();
 	    x.remove([2,4], {shrink:1});
 	    x.idx.should.eql([0,1,2]);
 	    assert.ok(!x.needScan);
 	    assert.ok(x.limit===3);
+	    x.iok.should.eql([]);
 	});
-	it('options={preserve:1} should preserve index values, no decrement after remove', function(){
+	it('options={preserve:1} should preserve index values, no decrement after remove, still kills iok', function(){
 	    var x = new PartialIndex(data,5,0,1);
 	    x.scan();
 	    x.remove([2,4], {preserve:1});
 	    x.idx.should.eql([0,1,3]);
 	    assert.ok(x.limit===5);
 	    assert.ok(x.needScan);
+	    x.iok.should.eql([]);
 	});
     }); 
     describe('.shrink(newsize)', function(){

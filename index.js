@@ -56,6 +56,40 @@
 	    };
     }
 
+    function makeBulkFilter(prop1,dir1,prop2,dir2,prop3,dir3){
+	if (dir3){
+	    return function(data){
+		var i,l,r,item;
+		for(i=0,l=data.length,r=[];i<l;++i){
+		    item = data[i];
+		    if (item && (item[prop1]>0) && (item[prop2]>0) && (item[prop3]>0))
+			r.push(i);
+		}
+		return r;
+	    };
+	} else if (dir2){
+	    return function(data){
+		var i,l,r,item;
+		for(i=0,l=data.length,r=[];i<l;++i){
+		    item = data[i];
+		    if (item && (item[prop1]>0) && (item[prop2]>0))
+			r.push(i);
+		}
+		return r;
+	    };
+	} else {
+	    return function(data){
+		var i,l,r,item;
+		for(i=0,l=data.length,r=[];i<l;++i){
+		    item = data[i];
+		    if (item && (item[prop1]>0))
+			r.push(i);
+		}
+		return r;
+	    };
+	}
+    }
+
     function idxByBisection(sorted,v,comp){
 	var find = sorted.indexOf(v);
 	var cmp;
@@ -113,6 +147,7 @@
 	    var that = this;
 	    this.idxcomp = function(a,b){ var d=that.data; return that.datacomp(d[a],d[b]); };
 	    this.idxfilter = function(i){ return that.datafilter(that.data[i]); };
+	    this.bulkFilter = makeBulkFilter(prop1,dir1,prop2,dir2,prop3,dir3);
 	    if (this.data.length) this.needScan = 1;
 	};
 
@@ -141,25 +176,23 @@
     PartialIndex.prototype.scan = function(newLimit){
 	var i,l;
 	this.idx = [];
-	this.iok = [];
-	var idx = this.idx, iok=this.iok, limit=(newLimit || this.limit), datalength=this.data.length, data=this.data, f=this.datafilter;
+	var limit=(newLimit || this.limit);
 	this.needScan = 0;
 	this.limit = limit;
 	if (0===limit) return;
-	for(i=0,l=datalength;i<l;++i)
-	    if (f(data[i]))
-		iok.push(i);
-	this.sort();
+	this.iok = this.bulkFilter(this.data);
+	if (this.iok.length) 
+	    this.sort(limit);
     };
 
     PartialIndex.prototype.sort = function(newLimit){
+	if (!this.iok || !this.iok.length) return this.scan(newLimit);
 	if (newLimit>0)
 	    this.limit = newLimit;
 	var iok=this.iok, limit=this.limit, idxcomp=this.idxcomp, loc, i,l;
 	this.needScan = 0;
 	if (0===limit) return;
 	this.idx = iok.slice(0,limit);
-	if (0===iok.length) return;
 	var idx = this.idx;
 	idx.sort(idxcomp);
 	if (iok.length <= limit) return;
@@ -179,8 +212,8 @@
 	var limit = this.limit;
 	if (!limit) return;
 	if (this.idxfilter(lastdataidx)){
+	    if (this.needScan) return this.scan();
 	    this.iok.push(lastdataidx);
-	    if (this.needScan) return this.sort();
 	    if (idx.length<limit){
 		idx.push(lastdataidx);
 		idx.sort(this.idxcomp);
@@ -216,10 +249,12 @@
 	if (removed && options && options.scan)
 	    return this.scan(options.limit);
 	if (removed){
-	    if (options && options.shrink)
+	    this.iok = []; // iok is too large to be searching and repairing
+	    if (options && options.shrink){
 		this.limit -= removed;
-	    else 
+	    } else {
 		this.needScan=1;
+	    }
 	}
 	if (options && options.preserve) return; 
 	for(i=0,l=idx.length;i<l;++i)
