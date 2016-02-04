@@ -238,6 +238,7 @@
 	    if (rmidxs[i-1]>=rmidxs[i])
 		throw new Error("PartialIndex.remove called with unsorted list of indexes. List of indexes to be removed must be ascending.");
 	}
+	this.iok = []; // iok may be too large to be searching and repairing
 	i = rmidxs.length;
 	while(i-->0){
 	    loc = idx.indexOf(rmidxs[i]);
@@ -249,7 +250,6 @@
 	if (removed && options && options.scan)
 	    return this.scan(options.limit);
 	if (removed){
-	    this.iok = []; // iok is too large to be searching and repairing
 	    if (options && options.shrink){
 		this.limit -= removed;
 	    } else {

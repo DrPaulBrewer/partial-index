@@ -115,6 +115,7 @@ this option if rows are not being deleted from the underlying X.data
 
 ####Notes:  
 1. `PartialIndex.remove([list])` removes a list of rows from the index, not the data
+1. `PartialIndex.remove` will delete the cached this.iok even if no elements are removed from the index 
 1. `PartialIndex.remove` will decrement surviving index values down as necessary. 
 1. `PartialIndex.remove` will not fill out the list again.  To do that requires a `.scan()` or setting the `{scan:1}` option to remove.
 1. Because of decrements, calling `PartialIndex.remove(rows_to_remove)` without also removing the rows from the data will yield invalid results.  For this case, set the preserve option on remove.  
