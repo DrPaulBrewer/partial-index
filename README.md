@@ -67,7 +67,9 @@ the top 3 of col 2 are 9,5,4 which are found in rows [5], [4], and [2] of data
     > X.idx
     [5,4,2,0]
     
-### the scan filtering step is cached in .iok and can be skipped by calling .sort
+### the scan filtering step is cached in `.iok` and can be skipped by calling `.sort` 
+
+#### be aware that `.iok` will be dropped by `.remove()` or other routines when no longer valid
 
     > X.sort(4)
     > X.limit
@@ -91,8 +93,15 @@ To add a single row of new data, use `data.push(newrow)` and then call `X.syncLa
 
 to remove rows `[1,2,3]`:
 
+Method A -- efficient only for low limit indexes or removing 1 or 2 from large index 
+
 1. first call `data.splice(3,1); data.splice(2,1); data.splice(1,1)` to remove the rows from the data 
 1. then call `X.remove([1,2,3])` to remove the rows from the index
+
+Method B -- brute force sort, better for indexes that are more than 1 percent or so of a large dataset (100k)
+
+1. first call `data.splice` as above
+1. call `X.scan()` to rescan the data and rebuild the index (does not call `X.remove()`)
 
 ### `remove([rowlist], options)` deletes specified rows and applies an option
 

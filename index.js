@@ -189,17 +189,27 @@
 	if (!this.iok || !this.iok.length) return this.scan(newLimit);
 	if (newLimit>0)
 	    this.limit = newLimit;
-	var iok=this.iok, limit=this.limit, idxcomp=this.idxcomp, loc, i,l;
+	var iok=this.iok, ioki, limit=this.limit, idxcomp=this.idxcomp, loc, i,l;
 	this.needScan = 0;
 	if (0===limit) return;
-	this.idx = iok.slice(0,limit);
+	// testing reveals that full internal .sort(this.idxcomp) is actually pretty fast and
+	// our insertion sort with bisection is only faster when the index limit
+	// is less than 1% of the filtered data length
+	if (limit > 0.01*this.iok.length)
+	    this.idx = iok.slice();
+	else
+	    this.idx = iok.slice(0,10*limit);
 	var idx = this.idx;
 	idx.sort(idxcomp);
+	var j = idx.length;
+	if (j>limit)
+	    idx.splice(limit,j-limit);
 	if (iok.length <= limit) return;
-	for(i=this.idx.length,l=iok.length;i<l;++i){
-	    loc = idxByBisection(idx,i,idxcomp);
+	for(i=j,l=iok.length;i<l;++i){
+	    ioki = iok[i];
+	    loc = idxByBisection(idx,ioki,idxcomp);
 	    if (loc<limit) {
-		idx.splice(loc,0,i);
+		idx.splice(loc,0,ioki);
 		idx.splice(limit,1);
 	    }
 	}

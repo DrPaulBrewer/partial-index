@@ -470,4 +470,102 @@ describe('PartialIndex', function(){
 	    x.idx.should.eql([0]);
 	});
     });
+    describe(' random stress test 100,000 items, 10 cols ', function(){
+	var data = []; 
+	var seq = [];
+	var i,l,j,k;
+	for(i=0,l=100000;i<l;++i)
+	    for(j=0,k=10,data[i]=[],seq[i]=i;j<k;++j)
+		data[i][j] = Math.max(0, Math.floor(1000*Math.random()*Math.random()-100));
+	var prop1 = Math.floor(10*Math.random());
+	var prop2 = prop1;
+	while (prop2===prop1)
+	    prop2 = Math.floor(10*Math.random());
+	var prop3 = prop1;
+	while ((prop3===prop1) || (prop3===prop2))
+	    prop3 = Math.floor(10*Math.random());
+	var x = new PartialIndex(data,100,prop1,-1,prop2,1,prop3,-1);
+	var seqFiltered = x.bulkFilter(data);
+	var t0 = Date.now();
+	var sorted = seqFiltered.slice().sort(x.idxcomp);
+	var t1 = Date.now();
+	var tSorted = t1-t0;
+	t0 = Date.now();
+	x.scan();
+	t1 = Date.now();
+	var tScan100x100k = t1-t0;
+	var y = new PartialIndex(data,data.length,prop1,-1,prop2,1,prop3,-1);
+	t0 = Date.now();
+	y.scan();
+	t1 = Date.now();
+	var tScan100k2 = t1-t0;	
+	assert.ok(data.length===100000);
+	assert.ok(x.iok.length>0);
+	assert.ok(y.iok.length>0);
+	assert.ok(x.idx.length>0);
+	assert.ok(y.idx.length>0);
+	var filtered = seq.slice().filter(x.idxfilter); // independent calculation using other code distinct from iok's bulkFilter
+	assert(filtered.length===x.iok.length);
+	assert(filtered.length===y.iok.length);
+	x.iok.should.eql(filtered);
+	y.iok.should.eql(filtered);
+	x.data.should.eql(y.data);
+	assert.ok(x.idx[0]===y.idx[0]);
+	assert.ok(x.idx[1]===y.idx[1]);
+	x.idx.should.eql(y.idx.slice(0,x.idx.length));
+	var randomDel = sorted[Math.floor(sorted.length*Math.random())];
+	t0 = Date.now();
+	x.remove([randomDel]);
+	t1 = Date.now();
+	var tRemove1X = t1-t0;
+	t0 = Date.now();
+	y.remove([randomDel]);
+	t1 = Date.now();
+	var tRemove1Y = t1-t0;
+	data.splice(randomDel,1);
+	t0 = Date.now();
+	x.scan();
+	t1 = Date.now();
+	var tXRescan = t1-t0;
+	t0 = Date.now();
+	y.scan();
+	t1 = Date.now();
+	var tYRescan = t1-t0;
+	var rmItems = [];
+	while(rmItems.length<50){
+	    var rmItem = y.iok[Math.floor(y.iok.length*Math.random())];
+	    if (rmItems.indexOf(rmItem)===-1)
+		rmItems.push(rmItem);
+	}
+	rmItems.sort(function(a,b){ return (a-b); });
+	t0 = Date.now();
+	x.remove(rmItems);
+	t1 = Date.now();
+	var tRemove50X = t1-t0;
+	t0 = Date.now();
+	y.remove(rmItems);
+	t1 = Date.now();
+	var tRemove50Y = t1-t0;
+	it('should scan/sort the entire dataset ('+tScan100k2+'ms) with at most 25 percent overhead over builtin sort ('+tSorted+'ms)', function(){
+	    assert.ok(tScan100k2<(1.25*tSorted));
+	});
+	it('should scan/sort 100 items faster ('+tScan100x100k+'ms) than builtin sort on the entire dataset ('+tSorted+'ms)', function(){
+	    assert.ok(tScan100x100k<tSorted);
+	});
+	it('should remove 1 item on 100 item index ('+tRemove1X+'ms) faster than rescan ('+tXRescan+'ms)', function(){
+	    assert.ok(tRemove1X<tXRescan);
+	});
+	it('should remove 1 item on full index ('+tRemove1Y+'ms) faster than rescan('+tYRescan+'ms)', function(){
+	    assert.ok(tRemove1Y<tYRescan);
+	});
+	it('should remove 50 items on 100 item index ('+tRemove50X+'ms) faster than rescan ('+tXRescan+'ms)', function(){
+	    assert.ok(tRemove50X<tXRescan);
+	});
+	// it('should remove 50 items on full index ('+tRemove50Y+'ms) faster than rescan('+tYRescan+'ms)', function(){
+	//    assert.ok(tRemove50Y<tYRescan);
+	// });
+	
+    });
+	
+	
 });
