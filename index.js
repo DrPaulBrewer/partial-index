@@ -91,13 +91,13 @@
     }
 
     function idxByBisection(sorted,v,comp){
-	var find = sorted.indexOf(v);
 	var cmp;
 	var left,right,mid,midval;
-	if (find!==-1) return find;
+	var checkLeft;
 	if (!comp){
-	    if (v>sorted[sorted.length-1]) return sorted.length;
+	    if (v>=sorted[sorted.length-1]) return sorted.length;
 	    if (v<sorted[0]) return 0;
+	    if (v===sorted[0]) return 1;
 	    left = 0;
 	    right = sorted.length-1;
 	    while( (right-left)>1 ){
@@ -109,13 +109,15 @@
 		    right = mid;
 		else if (v===midval){
 		    left = mid;
-		    right = mid;
+		    right = mid+1;
 		}
 	    }
 	    return right;
 	} else {
-	    if (comp(v,sorted[sorted.length-1])>0) return sorted.length;
-	    if (comp(v,sorted[0])<0) return 0;
+	    if (comp(v,sorted[sorted.length-1])>=0) return sorted.length;
+	    checkLeft = comp(v,sorted[0]);
+	    if (checkLeft<0) return 0;
+	    if (checkLeft===0) return 1;
 	    left = 0;
 	    right = sorted.length-1;
 	    while( (right-left)>1 ){
@@ -128,7 +130,7 @@
 		    right = mid;
 		else if (0===cmp){
 		    left = mid;
-		    right = mid;
+		    right = mid+1;
 		}
 	    }
 	    return right;
@@ -142,6 +144,7 @@
 	    this.idx = [];
 	    this.iok = [];
 	    this.prop1 = prop1;
+	    this.dir1 = dir1;
 	    this.datafilter = makeFilter(prop1,dir1,prop2,dir2,prop3,dir3);
 	    this.datacomp = makeSorter(prop1,dir1,prop2,dir2,prop3,dir3);
 	    var that = this;
@@ -162,6 +165,24 @@
 	    a[i] = data[idx[i]][prop];
 	return a;
     };
+
+    PartialIndex.prototype.valBisect = function(v){
+	var prop1 = this.prop1;
+	var dir1  = this.dir1;
+	var idx = this.idx;
+	var data = this.data;
+	var cmp;
+	if (!idx || idx.length===0) return;
+	if (dir1<0)
+	    cmp = function(av,bi){
+		return (data[bi][prop1]-av);
+	    };
+	else
+	    cmp = function(av,bi){
+		return (av-data[bi][prop1]);
+	    };
+	return idxByBisection(idx, v, cmp);
+    };		
     
     PartialIndex.prototype.idxdata = function(ii){
 	var i=0,l=this.idx.length,idx=this.idx,data=this.data,a=[];

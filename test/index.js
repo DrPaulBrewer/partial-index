@@ -470,6 +470,47 @@ describe('PartialIndex', function(){
 	    x.idx.should.eql([0]);
 	});
     });
+
+    describe('.valBisect', function(){
+	var x = new PartialIndex(tendata.slice(),5,0,1);
+	var y = new PartialIndex(tendata.slice(),5,0,-1);
+	x.scan();
+	y.scan();
+	it('should return 0 for values before left extreme', function(){
+	    assert.ok(x.valBisect(0.75)===0);
+	    assert.ok(x.valBisect(0)===0);
+	    assert.ok(y.valBisect(10)===0);
+	    assert.ok(y.valBisect(9.1)===0);	    
+	});
+	it('should return 1 for values equal to left extreme', function(){
+	    assert.ok(x.valBisect(1)===1);
+	    assert.ok(y.valBisect(9)===1);
+	});
+	it('should return limit-1 (4) for values before right extreme', function(){
+	    assert.ok(x.valBisect(4.99)===4);
+	    assert.ok(x.valBisect(4.01)===4);
+	    assert.ok(y.valBisect(5.01)===4);
+	    assert.ok(y.valBisect(5.99)===4);
+	});
+	it('should return limit (5) for values equal to or after right extreme', function(){
+	    assert.ok(x.valBisect(5)===5);
+	    assert.ok(y.valBisect(5)===5);
+	    assert.ok(x.valBisect(6.5)===5);
+	    assert.ok(y.valBisect(4.5)===5);
+	});
+	it('should match alternative calculations', function(){
+	    var i,l;
+	    for(i=0,l=5;i<l;++i)
+		assert.ok(x.valBisect(i)===i);
+	    for(i=0,l=5;i<l;++i)
+		assert.ok(y.valBisect(10-i)===i);
+	    for(i=0,l=5;i<l;i+=0.25)
+		assert.ok(x.valBisect(i)===Math.floor(i));
+	    for(i=0,l=5;i<l;i+=0.25)
+		assert.ok(y.valBisect(10-i)===Math.floor(i));
+	});
+    });
+
     describe(' random stress test 100,000 items, 10 cols ', function(){
 	var data = []; 
 	var seq = [];

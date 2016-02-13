@@ -59,6 +59,14 @@ the top 3 of col 2 are 9,5,4 which are found in rows [5], [4], and [2] of data
     X.val(2) // 4
     X.val(3) // undefined
 
+    X.valBisect(10)  // 0  gives hypothetical position in index via bisection
+    X.valBisect(9)   // 1
+    X.valBisect(8)   // 1
+    X.valBisect(5)   // 2
+    X.valBisect(4.5) // 2
+    X.valBisect(4)   // 3
+    X.valBisect(1)   // 3
+
 ### scan with a parameter can be used to set a new limit
 
     > X.scan(4)
