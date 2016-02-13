@@ -587,6 +587,18 @@ describe('PartialIndex', function(){
 	y.remove(rmItems);
 	t1 = Date.now();
 	var tRemove50Y = t1-t0;
+	it('should generate the same index whether streaming the data or all-at-once', function(){
+	    var zdata = [];
+	    var i,l;
+	    var Streamed = new PartialIndex(zdata,100,prop1,-1,prop2,1,prop3,-1);
+	    for(i=0,l=data.length;i<l;++i){
+		zdata.push(data[i]);
+		Streamed.syncLast();
+	    }
+	    var Bulk = new PartialIndex(data,100,prop1,-1,prop2,1,prop3,-1);
+	    Bulk.scan();
+	    Streamed.idx.should.eql(Bulk.idx);
+	}); 
 	it('should scan/sort the entire dataset ('+tScan100k2+'ms) with at most 25 percent overhead over builtin sort ('+tSorted+'ms)', function(){
 	    assert.ok(tScan100k2<(1.25*tSorted));
 	});
