@@ -244,7 +244,8 @@
 	if (!limit) return;
 	if (this.idxfilter(lastdataidx)){
 	    if (this.needScan) return this.scan();
-	    this.iok.push(lastdataidx);
+	    if (Array.isArray(this.iok)) 
+		this.iok.push(lastdataidx);
 	    if (idx.length<limit){
 		idx.push(lastdataidx);
 		idx.sort(this.idxcomp);
@@ -269,7 +270,7 @@
 	    if (rmidxs[i-1]>=rmidxs[i])
 		throw new Error("PartialIndex.remove called with unsorted list of indexes. List of indexes to be removed must be ascending.");
 	}
-	this.iok = []; // iok may be too large to be searching and repairing
+	delete this.iok; /* bust iok cache */
 	i = rmidxs.length;
 	while(i-->0){
 	    loc = idx.indexOf(rmidxs[i]);
