@@ -1,6 +1,6 @@
 {
   "name": "partial-index",
-  "version": "1.6.2",
+  "version": "1.7.0",
   "description": "create and manage index for partial sorting of 2D numerical data array",
   "main": "index.js",
   "repository": "drpaulbrewer/partial-index",
