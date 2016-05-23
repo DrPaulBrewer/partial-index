@@ -219,7 +219,7 @@
 	if (limit > 0.01*this.iok.length)
 	    this.idx = iok.slice();
 	else
-	    this.idx = iok.slice(0,10*limit);
+	    this.idx = iok.slice(0,2*limit);
 	var idx = this.idx;
 	idx.sort(idxcomp);
 	var j = idx.length;
