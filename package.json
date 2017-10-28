@@ -23,6 +23,6 @@
     "coveralls": "^3.0.0",
     "istanbul": "^0.4.2",
     "mocha": "^4.0.1",
-    "should": "^13.1.2"
+    "should": "^13.1.3"
   }
 }
