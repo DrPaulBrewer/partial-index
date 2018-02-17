@@ -1,5 +1,4 @@
-partial-index.js
-====
+# partial-index.js
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/DrPaulBrewer/partial-index.svg)](https://greenkeeper.io/)
 [![Build Status](https://travis-ci.org/DrPaulBrewer/partial-index.svg?branch=master)](https://travis-ci.org/DrPaulBrewer/partial-index)
@@ -9,13 +8,13 @@ partial-index.js
 Npm javascript module for creating partial indexes on positive values in numerical 2D array data, such
 as top 10 lists, bottom 10 lists, etc. Up to 3 columns with directions can be specified.
 
-##Example:
+## Example:
 
-###Installation
+### Installation
 
     npm install partial-index --save
 
-###Running
+### Running
 
     node
 
@@ -31,8 +30,8 @@ as top 10 lists, bottom 10 lists, etc. Up to 3 columns with directions can be sp
 
     > var PartialIndex = require('partial-index');
 
-##Create `new PartialIndex(data, limit, col, dir, ... )` for top 3 from col 2
-
+## Create `new PartialIndex(data, limit, col, dir, ... )` for top 3 from col 2
+ 
     > var X = new PartialIndex(data, 3, 2, -1); 
     > X.idx
     []
@@ -132,7 +131,7 @@ shrinks the index by reducing X.limit by the number of removed rows and does not
 removes any of the removed rows `[1,2,3]` from X.idx and does not decrement any of the remaining X.idx values.  Use
 this option if rows are not being deleted from the underlying X.data
 
-####Notes:  
+#### Notes:  
 1. `PartialIndex.remove([list])` removes a list of rows from the index, not the data
 1. `PartialIndex.remove` will delete the cached this.iok even if no elements are removed from the index 
 1. `PartialIndex.remove` will decrement surviving index values down as necessary. 
