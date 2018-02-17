@@ -4,9 +4,9 @@
 
 var assert = require('assert');
 var should = require('should');
-var PartialIndex = require("../index.js");
+var PartialIndex = require('../index.js');
 
-describe('PartialIndex', function(){
+describe('PartialIndex', () => {
     var tendata = 
 	[[1,9,3,10,10],
 	 [2,8,1,10,10],
