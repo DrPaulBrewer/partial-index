@@ -617,8 +617,8 @@ describe('PartialIndex', function(){
 	    RStreamed.idx.should.not.eql(Bulk.idx);
 	    RStreamed.idxdata().should.eql(Bulk.idxdata());
 	}); 
-	it('should scan/sort the entire dataset ('+tScan100k2+'ms) with at most 25 percent overhead over builtin sort ('+tSorted+'ms)', function(){
-	    assert.ok(tScan100k2<(1.25*tSorted));
+	it('should scan/sort the entire dataset ('+tScan100k2+'ms) with at most 50 percent overhead over builtin sort ('+tSorted+'ms)', function(){
+	    assert.ok(tScan100k2<(1.50*tSorted));
 	});
 	it('should scan/sort 100 items faster ('+tScan100x100k+'ms) than builtin sort on the entire dataset ('+tSorted+'ms)', function(){
 	    assert.ok(tScan100x100k<tSorted);
