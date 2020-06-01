@@ -1,6 +1,6 @@
 # partial-index.js
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/DrPaulBrewer/partial-index.svg)](https://greenkeeper.io/)
+
 [![Build Status](https://travis-ci.org/DrPaulBrewer/partial-index.svg?branch=master)](https://travis-ci.org/DrPaulBrewer/partial-index)
 [![Coverage Status](https://coveralls.io/repos/github/DrPaulBrewer/partial-index/badge.svg?branch=master)](https://coveralls.io/github/DrPaulBrewer/partial-index?branch=master)
 
